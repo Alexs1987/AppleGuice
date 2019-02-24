@@ -20,9 +20,15 @@ fi
 
 path=$1;
 
-interfaceDeclerationsObjC=$(grep -sirhE --include=*.h --regexp='((@interface[^:]+:\s*[^>{}*/!]*>?)|(@protocol[^<]*<[^>]+>))' ${path});
+#If the dir to exclude is the same as the path - we disregard it. Otherwise - we use it.
+dirToExclude=""
+if [ "${path}" != "$2" ]; then
+	dirToExclude=$2
+fi
 
-interfaceDeclerationsSwift=$(grep -sirhE --include=*.swift --regexp='((class|protocol)[^:()]+:\s*[^{]*{)' ${path});
+interfaceDeclerationsObjC=$(grep -sirhE --include=*.h --exclude-dir=${dirToExclude} --regexp='((@interface[^:]+:\s*[^>{}*/!]*>?)|(@protocol[^<]*<[^>]+>))' ${path});
+
+interfaceDeclerationsSwift=$(grep -sirhE --include=*.swift --exclude-dir=${dirToExclude} --regexp='((class|protocol)[^:()]+:\s*[^{]*{)' ${path});
 
 interfaceDeclerations=""
 
@@ -30,9 +36,9 @@ interfaceDeclerations+=${interfaceDeclerationsObjC}
 interfaceDeclerations+=$'\n'
 interfaceDeclerations+=${interfaceDeclerationsSwift}
 
-if [ "$2" ]; then
-	echo > $2;
-	echo "${interfaceDeclerations}" >> $2;
+if [ "$3" ]; then
+	echo > $3;
+	echo "${interfaceDeclerations}" >> $3;
 else
 	echo "${interfaceDeclerations}"
 fi
