@@ -18,26 +18,22 @@ if [ ! "$1" ]; then
 	exit 1;
 fi
 
-bootstrapper="bootStrapper";
-
 path=$1;
-scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-excludePrefixes=$5
 
-if [ ! -f ${scriptDir}/${bootstrapper} ]
-then
-    cd ${scriptDir};
-    make EXENAME=${bootstrapper} CXXFLAGS=-mios-version-min=7.0.0
-fi
+interfaceDeclerationsObjC=$(grep -sirhE --include=*.h --regexp='((@interface[^:]+:\s*[^>{}*/!]*>?)|(@protocol[^<]*<[^>]+>))' ${path});
 
-interfaceDeclerations=$(bash ${scriptDir}/appleGuiceDeclarations.sh ${path})
+interfaceDeclerationsSwift=$(grep -sirhE --include=*.swift --regexp='((class|protocol)[^:()]+:\s*[^{]*{)' ${path});
 
-result=$(echo "${interfaceDeclerations}" | ${scriptDir}/${bootstrapper} ${excludePrefixes});
+interfaceDeclerations=""
+
+interfaceDeclerations+=${interfaceDeclerationsObjC}
+interfaceDeclerations+=$'\n'
+interfaceDeclerations+=${interfaceDeclerationsSwift}
 
 if [ "$2" ]; then
 	echo > $2;
-	echo "${result}" >> $2;
+	echo "${interfaceDeclerations}" >> $2;
 else
-	echo "${result}"
+	echo "${interfaceDeclerations}"
 fi
 exit 0;

@@ -823,7 +823,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PROJECT_ROOT=${PROJECT_DIR}\nbash ${PROJECT_DIR}/Bootstrapper/appleGuiceBootstrapper.sh ${PROJECT_ROOT} ${PROJECT_DIR}/AppleGuiceUnitTests/Setup/AppleGuiceBindingBootstrapper.m";
+			shellScript = "PROJECT_ROOT=${PROJECT_DIR}\nbash ${PROJECT_DIR}/Bootstrapper/appleGuiceBootstrapper.sh ${PROJECT_ROOT} ${PROJECT_DIR}/AppleGuiceUnitTests/Setup/AppleGuiceBindingBootstrapper.m\n";
 		};
 		F172DD7916F924C500BA754E /* Bootstrap project */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -837,7 +837,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "PROJECT_ROOT=${PROJECT_DIR}\nbash ${PROJECT_DIR}/Bootstrapper/appleGuiceBootstrapper.sh ${PROJECT_ROOT} ${PROJECT_DIR}/AppleGuice/AppleGuiceBindingBootstrapper.m";
+			shellScript = "PROJECT_ROOT=${PROJECT_DIR}\nbash ${PROJECT_DIR}/Bootstrapper/appleGuiceBootstrapper.sh ${PROJECT_ROOT} ${PROJECT_DIR}/AppleGuice/AppleGuiceBindingBootstrapper.m\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
