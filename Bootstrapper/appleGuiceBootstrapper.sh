@@ -22,7 +22,9 @@ bootstrapper="bootStrapper";
 
 path=$1;
 scriptDir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-excludePrefixes=$5
+excludePrefixes=$3
+dirToExclude=$4
+resultDir=$5
 
 if [ ! -f ${scriptDir}/${bootstrapper} ]
 then
@@ -30,15 +32,13 @@ then
     make EXENAME=${bootstrapper} CXXFLAGS=-mios-version-min=7.0.0
 fi
 
-interfaceDeclerationsObjC=$(grep -sirhE --include=*.h --regexp='((@interface[^:]+:\s*[^>{}*/!]*>?)|(@protocol[^<]*<[^>]+>))' ${path});
+interfaceDeclerations=$(bash ${scriptDir}/appleGuiceDeclarations.sh ${path} ${dirToExclude})
 
-interfaceDeclerationsSwift=$(grep -sirhE --include=*.swift --regexp='((class|protocol)[^:()]+:\s*[^{]*{)' ${path});
+rawPath="${resultDir}/RawDeclarations/*"
 
-interfaceDeclerations=""
-
-interfaceDeclerations+=${interfaceDeclerationsObjC}
-interfaceDeclerations+=$'\n'
-interfaceDeclerations+=${interfaceDeclerationsSwift}
+for filename in ${rawPath}; do
+    interfaceDeclerations+=$(<${filename})
+done
 
 result=$(echo "${interfaceDeclerations}" | ${scriptDir}/${bootstrapper} ${excludePrefixes});
 
